@@ -20,6 +20,7 @@ export default {
 			  ).first<{ value: string }>();
 			
 			  return Response.json({
+				name: "ACPM Hymns",
 			    version: row ? row.value : "0",
 			  });
 			}
