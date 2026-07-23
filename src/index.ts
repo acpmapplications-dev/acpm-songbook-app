@@ -13,6 +13,16 @@ export default {
 		const method = request.method;
 
 		// --- JSON API routes ---
+		// GET /api/version -> returns current DB version for songs
+		if (path === "/api/version" && method === "GET") {
+			  const row = await env.DB.prepare(
+			    "SELECT value FROM db_meta WHERE key = 'songs_version'"
+			  ).first<{ value: string }>();
+			
+			  return Response.json({
+			    version: row ? row.value : "0",
+			  });
+			}
 
 		// GET /api/songs -> list all songs
 		if (path === "/api/songs" && method === "GET") {
@@ -22,20 +32,7 @@ export default {
 			return Response.json(results);
 		}
 
-		// GET /api/songs/:id -> single song by internal id
-		if (path.startsWith("/api/songs/") && method === "GET") {
-			const id = path.split("/api/songs/")[1];
-			const row = await env.DB.prepare(
-				"SELECT id, title AS lyrics_title, lyrics FROM songs"
-			)
-				.bind(id)
-				.first();
-
-			if (!row) {
-				return Response.json({ error: "Song not found" }, { status: 404 });
-			}
-			return Response.json(row);
-		}
+		
 
 		// POST /api/songs -> insert a new song
 		if (path === "/api/songs" && method === "POST") {
