@@ -26,7 +26,7 @@ export default {
 		if (path.startsWith("/api/songs/") && method === "GET") {
 			const id = path.split("/api/songs/")[1];
 			const row = await env.DB.prepare(
-				"SELECT id, songnumber, title, lyrics FROM songs WHERE id = ?"
+				"SELECT id, lyrics_title AS title, lyrics FROM songs"
 			)
 				.bind(id)
 				.first();
