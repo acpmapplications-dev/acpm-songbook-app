@@ -17,7 +17,7 @@ export default {
 		// GET /api/songs -> list all songs
 		if (path === "/api/songs" && method === "GET") {
 			const { results } = await env.DB.prepare(
-				"SELECT id, songnumber, title, lyrics FROM songs"
+				"SELECT id, title as lyrics_title, lyrics FROM songs"
 			).all();
 			return Response.json(results);
 		}
@@ -26,7 +26,7 @@ export default {
 		if (path.startsWith("/api/songs/") && method === "GET") {
 			const id = path.split("/api/songs/")[1];
 			const row = await env.DB.prepare(
-				"SELECT id, lyrics_title AS title, lyrics FROM songs"
+				"SELECT id, title AS lyrics_title, lyrics FROM songs"
 			)
 				.bind(id)
 				.first();
